@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.symbol.emdk.EMDKManager;
 
-public class StockTakingActivity extends AppCompatActivity {
+public class StockTakingActivity extends AppCompatActivity implements EMDKManager.EMDKListener {
 
     private String TAG = "StockTakingActivity.class";
 
@@ -57,6 +57,24 @@ public class StockTakingActivity extends AppCompatActivity {
         }
         //Check the intent action is for us
         Log.i(TAG,"++++++++++++++++++++++++++++++++++++++++++++++Intent get action:"+i.getAction());
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        // TODO Auto-generated method stub
+        super.onDestroy();
+        //Clean up the objects created by EMDK manager
+
+    }
+
+    @Override
+    public void onOpened(EMDKManager emdkManager) {
+
+    }
+
+    @Override
+    public void onClosed() {
 
     }
 }

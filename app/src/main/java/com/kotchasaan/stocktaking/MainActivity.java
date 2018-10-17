@@ -16,8 +16,6 @@ public class MainActivity extends AppCompatActivity implements EMDKListener{
 
     //Assign the profile name used in EMDKConfig.xml
     private String profileName = "MainDataCapture";
-    //Assign the profile name used in EMDKConfig.xml  for MSR handling
-    private String profileNameStockTaking = "StockTakingDataCapture";
 
     //Declare a variable to store ProfileManager object
     private ProfileManager mProfileManager = null;
@@ -123,14 +121,6 @@ public class MainActivity extends AppCompatActivity implements EMDKListener{
                 if(results.statusCode == EMDKResults.STATUS_CODE.FAILURE)
                 {
                     //Failed to set profile
-                }
-
-                //Call processPrfoile for profile MSR
-                results = mProfileManager.processProfile(profileNameStockTaking, ProfileManager.PROFILE_FLAG.SET, modifyData);
-
-                if(results.statusCode == EMDKResults.STATUS_CODE.FAILURE)
-                {
-                    //Failed to set profile MSR
                 }
             }catch (Exception ex){
                 // Handle any exception
