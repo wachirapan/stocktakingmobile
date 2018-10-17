@@ -8,12 +8,16 @@ import com.symbol.emdk.EMDKManager.EMDKListener;
 
 import android.content.Intent;
 import android.widget.TextView;
-
+import android.widget.Button;
+import android.view.View;
+import android.view.View.OnClickListener;
 
 public class MainActivity extends AppCompatActivity implements EMDKListener{
 
     //Assign the profile name used in EMDKConfig.xml
     private String profileName = "MainDataCapture";
+    //Assign the profile name used in EMDKConfig.xml  for MSR handling
+    private String profileNameStockTaking = "StockTakingDataCapture";
 
     //Declare a variable to store ProfileManager object
     private ProfileManager mProfileManager = null;
@@ -23,6 +27,9 @@ public class MainActivity extends AppCompatActivity implements EMDKListener{
 
     //Declare a variable to store the textViewBarcode
     private TextView textViewBarcode = null;
+
+    //Declare a variable to store the buttonMSR
+    private Button buttonStockTaking = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +46,30 @@ public class MainActivity extends AppCompatActivity implements EMDKListener{
 
         }
 
+
+
         //Get the textViewBarcode
         textViewBarcode = (TextView) findViewById(R.id.textViewBarcode);
 
+        buttonStockTaking = (Button) findViewById(R.id.buttonStockTaking);
+        //Add an OnClickListener for buttonMSR
+        buttonStockTaking.setOnClickListener(buttonStockTakingOnClick);
         //In case we have been launched by the DataWedge intent plug-in
         Intent i = getIntent();
         handleDecodeData(i);
 
     }
+
+    //OnClickListener for buttonMSR
+    private OnClickListener buttonStockTakingOnClick = new OnClickListener() {
+        public void onClick(View v) {
+            //Launch StockTakingActivity
+            Intent myIntent = new Intent(MainActivity.this, StockTakingActivity.class);
+            //startActivity(new Intent(MainActivity.this, StockTakingActivity.class));
+
+            startActivity(myIntent);
+        }
+    };
 
     //We need to handle any incoming intents, so let override the onNewIntent method
     @Override
@@ -100,6 +123,14 @@ public class MainActivity extends AppCompatActivity implements EMDKListener{
                 if(results.statusCode == EMDKResults.STATUS_CODE.FAILURE)
                 {
                     //Failed to set profile
+                }
+
+                //Call processPrfoile for profile MSR
+                results = mProfileManager.processProfile(profileNameStockTaking, ProfileManager.PROFILE_FLAG.SET, modifyData);
+
+                if(results.statusCode == EMDKResults.STATUS_CODE.FAILURE)
+                {
+                    //Failed to set profile MSR
                 }
             }catch (Exception ex){
                 // Handle any exception

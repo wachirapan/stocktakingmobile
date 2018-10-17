@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
+    tools:context=".StockTakingActivity">
     <TextView
         android:id="@+id/textViewBarcode"
         android:layout_width="wrap_content"
@@ -23,14 +22,4 @@
         android:layout_marginTop="200dp"
         android:layout_marginLeft="50dp"
         android:ems="10" />
-
-    <Button
-        android:id="@+id/buttonStockTaking"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp"
-        android:layout_marginLeft="50dp"
-        android:text="Stock Taking" />
-
 </RelativeLayout>
