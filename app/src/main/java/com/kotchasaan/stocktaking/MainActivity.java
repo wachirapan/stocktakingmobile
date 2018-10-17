@@ -6,6 +6,10 @@ import android.os.Bundle;
 import com.symbol.emdk.*;
 import com.symbol.emdk.EMDKManager.EMDKListener;
 
+import android.content.Intent;
+import android.widget.TextView;
+
+
 public class MainActivity extends AppCompatActivity implements EMDKListener{
 
     //Assign the profile name used in EMDKConfig.xml
@@ -16,6 +20,9 @@ public class MainActivity extends AppCompatActivity implements EMDKListener{
 
     //Declare a variable to store EMDKManager object
     private EMDKManager emdkManager = null;
+
+    //Declare a variable to store the textViewBarcode
+    private TextView textViewBarcode = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +39,41 @@ public class MainActivity extends AppCompatActivity implements EMDKListener{
 
         }
 
+        //Get the textViewBarcode
+        textViewBarcode = (TextView) findViewById(R.id.textViewBarcode);
+
+        //In case we have been launched by the DataWedge intent plug-in
+        Intent i = getIntent();
+        handleDecodeData(i);
+
+    }
+
+    //We need to handle any incoming intents, so let override the onNewIntent method
+    @Override
+    public void onNewIntent(Intent i) {
+        handleDecodeData(i);
+
+    }
+
+    //This function is responsible for getting the data from the intent
+    private void handleDecodeData(Intent i) {
+        //Check the intent action is for us
+        if (i.getAction().contentEquals("com.kotchasaan.stocktaking.RECVR") ) {
+            //Get the source of the data
+            String source = i.getStringExtra("com.motorolasolutions.emdk.datawedge.source");
+
+            //Check if the data has come from the Barcode scanner
+            if(source.equalsIgnoreCase("scanner")) {
+                //Get the data from the intent
+                String data = i.getStringExtra("com.motorolasolutions.emdk.datawedge.data_string");
+
+                //Check that we have received data
+                if(data != null && data.length() > 0) {
+                    //Display the data to the text view
+                    textViewBarcode.setText("Data = " + data);
+                }
+            }
+        }
     }
 
     @Override

@@ -4,8 +4,11 @@
   </characteristic>
   <characteristic type="Profile">
     <parm name="ProfileName" value="MainDataCapture"/>
-    <parm name="ModifiedDate" value="2018-10-17 13:08:33"/>
+    <parm name="ModifiedDate" value="2018-10-17 14:11:03"/>
     <parm name="TargetSystemVersion" value="7.2"/>
+    
+    
+    
   <characteristic type="ActivitySelection" version="0.1">
       <parm name="emdk_name" value=""/>
       <characteristic type="Application">
@@ -266,6 +269,23 @@
         <parm name="bdf_send_hex" value="Default"/>
         <parm name="bdf_send_tab" value="Default"/>
         <parm name="bdf_send_enter" value="true"/>
+      </characteristic>
+    </characteristic>
+    <characteristic type="Intent" version="6.3">
+      <parm name="emdk_name" value=""/>
+      <parm name="intent_output_enabled" value="true"/>
+      <parm name="intent_action" value="com.kotchasaan.stocktaking.RECVR"/>
+      <parm name="intent_category" value="android.intent.category.DEFAULT"/>
+      <parm name="intent_delivery" value="0"/>
+      <parm name="intent_flag_receiver_foreground" value="Default"/>
+      <characteristic type="BasicDataFormatting">
+        <parm name="bdf_enabled" value="true"/>
+        <parm name="bdf_prefix" value=""/>
+        <parm name="bdf_suffix" value=""/>
+        <parm name="bdf_send_data" value="true"/>
+        <parm name="bdf_send_hex" value="Default"/>
+        <parm name="bdf_send_tab" value="Default"/>
+        <parm name="bdf_send_enter" value="Default"/>
       </characteristic>
     </characteristic>
   </characteristic>
