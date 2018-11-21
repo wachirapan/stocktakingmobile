@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements EMDKListener{
 
@@ -42,6 +43,13 @@ public class MainActivity extends AppCompatActivity implements EMDKListener{
     //Declare a variable to store the buttonMSR
     private Button buttonStockTaking = null;
 
+    private TextView textViewProductId = null;
+    private TextView textViewIdValue = null;
+    private TextView textViewInternalName = null;
+    private TextView textViewQoh = null;
+    private TextView textViewSalePrice = null;
+    private TextView textViewPurchasePrice = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +68,14 @@ public class MainActivity extends AppCompatActivity implements EMDKListener{
         buttonStockTaking = (Button) findViewById(R.id.buttonStockTaking);
         //Add an OnClickListener for buttonMSR
         buttonStockTaking.setOnClickListener(buttonStockTakingOnClick);
+
+        textViewProductId = (TextView) findViewById(R.id.textViewProductId);
+        textViewIdValue = (TextView) findViewById(R.id.textViewIdValue);
+        textViewInternalName = (TextView) findViewById(R.id.textViewInternalName);
+        textViewQoh = (TextView) findViewById(R.id.textViewQoh);
+        textViewSalePrice = (TextView) findViewById(R.id.textViewSalePrice);
+        textViewPurchasePrice = (TextView) findViewById(R.id.textViewPurchasePrice);
+
         //In case we have been launched by the DataWedge intent plug-in
         Intent i = getIntent();
         handleDecodeData(i);
@@ -68,9 +84,8 @@ public class MainActivity extends AppCompatActivity implements EMDKListener{
 
     private class GetProductInfo extends AsyncTask<Void, Void, Void> {
         private String pData = null;
+        private Map productInfo =  new HashMap();
         public GetProductInfo(String data) {
-            Log.e(TAG, "=========================================================2.Response from url: " + data);
-
             this.pData = data;
         }
 
@@ -85,20 +100,21 @@ public class MainActivity extends AppCompatActivity implements EMDKListener{
         protected Void doInBackground(Void... arg0) {
             HttpHandler sh = new HttpHandler();
             // Making a request to url and getting response
-            Log.e(TAG, "=========================================================2.1.Response from url: " + this.pData);
             String url = "http://10.10.1.104:8080/warehousemgr/control/getProductInformationStock?" +
                     "idValue="+this.pData +
                     "&productId="+this.pData+
                     "&login.username=oposs" +
                     "&login.password=ofbiz";
             String jsonStr = sh.makeServiceCall(url);
-
-            Log.e(TAG, "=========================================================3.Response from url: " + jsonStr);
-
             if (jsonStr != null) {
                 try {
                     JSONObject jsonObj = new JSONObject(jsonStr);
-                    Log.e(TAG, "=========================================================4.Response from url: " + jsonObj);
+
+                    productInfo.put("productId", jsonObj.getString("productId"));
+                    productInfo.put("idValue", jsonObj.getString("idValue"));
+                    productInfo.put("internalName", jsonObj.getString("internalName"));
+                    productInfo.put("productPriceList", jsonObj.getJSONArray("productPriceList"));
+                    productInfo.put("qoh", jsonObj.getString("qoh"));
                 } catch (final JSONException e) {
                     Log.e(TAG, "Json parsing error: " + e.getMessage());
                     runOnUiThread(new Runnable() {
@@ -130,6 +146,26 @@ public class MainActivity extends AppCompatActivity implements EMDKListener{
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
+            textViewProductId.setText("รหัสสินค้า: "+productInfo.get("productId").toString());
+            textViewIdValue.setText("บาร์โค้ด: "+productInfo.get("idValue").toString());
+            textViewInternalName.setText("ชื่อสินค้า: "+productInfo.get("internalName").toString());
+            textViewQoh.setText("สินค้าคงเหลือ: "+productInfo.get("qoh").toString());
+            JSONArray productPriceList = (JSONArray) productInfo.get("productPriceList");
+            for (int i = 0; i < productPriceList.length(); i++) {
+                try {
+                    JSONObject c = productPriceList.getJSONObject(i);
+                    if ("DEFAULT_PRICE".equals(c.getString("productPriceTypeId"))) {
+                        textViewSalePrice.setText("ราคาขาย: "+ c.getString("price"));
+                    }
+                    if ("PROMO_PRICE".equals(c.getString("productPriceTypeId"))) {
+                        textViewPurchasePrice.setText("ราคาทุน: "+ c.getString("price"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
             /*
             ListAdapter adapter = new SimpleAdapter(MainActivity.this, contactList,
                     R.layout.list_item, new String[]{ "email","mobile"},
