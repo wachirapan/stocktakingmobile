@@ -10,8 +10,7 @@ import com.symbol.emdk.EMDKManager.EMDKListener;
 
 import android.content.Intent;
 import android.util.Log;
-import android.widget.ListAdapter;
-import android.widget.SimpleAdapter;
+
 import android.widget.TextView;
 import android.widget.Button;
 import android.view.View;
@@ -100,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements EMDKListener{
         protected Void doInBackground(Void... arg0) {
             HttpHandler sh = new HttpHandler();
             // Making a request to url and getting response
-            String url = "http://10.10.1.104:8080/warehousemgr/control/getProductInformationStock?" +
+            String url = "http://10.10.1.106:8080/warehousemgr/control/getProductInformationStock?" +
                     "idValue="+this.pData +
                     "&productId="+this.pData+
                     "&login.username=oposs" +
@@ -178,10 +177,8 @@ public class MainActivity extends AppCompatActivity implements EMDKListener{
     //OnClickListener for buttonMSR
     private OnClickListener buttonStockTakingOnClick = new OnClickListener() {
         public void onClick(View v) {
-            //Launch StockTakingActivity
-            Intent myIntent = new Intent(MainActivity.this, StockTakingActivity.class);
-            //startActivity(new Intent(MainActivity.this, StockTakingActivity.class));
-
+            //Launch DocumentsActivity
+            Intent myIntent = new Intent(MainActivity.this, DocumentsActivity.class);
             startActivity(myIntent);
         }
     };
