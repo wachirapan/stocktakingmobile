@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.kotchasaan.stocktaking.SQLite.SQLdb;
 import com.kotchasaan.stocktaking.util.HttpHandler;
 import com.symbol.emdk.*;
 import com.symbol.emdk.EMDKManager.EMDKListener;
@@ -53,7 +54,10 @@ public class MainActivity extends AppCompatActivity implements EMDKListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        getSupportActionBar().hide();
+        //create sqlite
+        SQLdb db = new SQLdb(this);
+        db.getWritableDatabase();
         //The EMDKManager object will be created and returned in the callback.
         EMDKResults results = EMDKManager.getEMDKManager(getApplicationContext(), this);
 
@@ -99,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements EMDKListener{
         protected Void doInBackground(Void... arg0) {
             HttpHandler sh = new HttpHandler();
             // Making a request to url and getting response
-            String url = "http://10.10.1.106:8080/warehousemgr/control/getProductInformationStock?" +
+            String url = "http://192.168.1.120:8080/warehousemgr/control/getProductInformationStock?" +
                     "idValue="+this.pData +
                     "&productId="+this.pData+
                     "&login.username=oposs" +

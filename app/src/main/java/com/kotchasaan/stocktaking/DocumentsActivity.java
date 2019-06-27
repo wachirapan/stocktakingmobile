@@ -13,7 +13,9 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import com.kotchasaan.stocktaking.SQLite.InsertData;
 import com.kotchasaan.stocktaking.util.HttpHandler;
+import com.kotchasaan.stocktaking.util.UserHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,7 +30,7 @@ import java.util.Map;
 
 public class DocumentsActivity extends AppCompatActivity {
     private String TAG = DocumentsActivity.class.getSimpleName();
-
+    String IDTag = "";
     private ListView docstListView;
 
     ArrayList<HashMap<String, String>> docsList;
@@ -37,6 +39,7 @@ public class DocumentsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_documents);
+        getSupportActionBar().hide();
 
         docsList = new ArrayList<>();
         docstListView = (ListView) findViewById(R.id.docstListView);
@@ -55,7 +58,7 @@ public class DocumentsActivity extends AppCompatActivity {
         protected Void doInBackground(Void... arg0) {
             HttpHandler sh = new HttpHandler();
             // Making a request to url and getting response
-            String url = "http://10.10.1.106:8080/warehousemgr/control/getWarehouseCountDraftAll?" +
+            String url = "http://192.168.1.120:8080/warehousemgr/control/getWarehouseCountDraftAll?" +
                     "&login.username=oposs" +
                     "&login.password=ofbiz";
             String jsonStr = sh.makeServiceCall(url);
@@ -72,6 +75,8 @@ public class DocumentsActivity extends AppCompatActivity {
                     for (int i = 0; i < docs.length(); i++) {
                         JSONObject c = docs.getJSONObject(i);
                         String id = c.getString("stockCountId");
+
+                        IDTag = c.getString("stockCountId");
 
                         JSONObject createdDate = c.getJSONObject("createdDate");
                         long time = createdDate.getLong("time");
@@ -135,8 +140,12 @@ public class DocumentsActivity extends AppCompatActivity {
                     Map<String, Object> map = (Map<String, Object>)docstListView.getItemAtPosition(position);
                     String _id = (String) map.get("id");
                     String _date = (String) map.get("date");
-                    Double _status = (Double) map.get("status");
+                    //Double _status = (Double) map.get("status");
                     Intent myIntent = new Intent(DocumentsActivity.this, StockTakingActivity.class);
+
+                    UserHelper userHelper = new UserHelper(DocumentsActivity.this);
+                    userHelper.createSession(IDTag);
+
                     startActivity(myIntent);
                 }
             });
