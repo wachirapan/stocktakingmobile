@@ -17,11 +17,11 @@
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTask">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
             <intent-filter>
                 <action android:name="com.kotchasaan.stocktaking.RECVR" />
 
@@ -32,9 +32,9 @@
             android:name=".StockTakingActivity"
             android:launchMode="singleTask">
             <intent-filter>
-                <action android:name="com.kotchasaan.stocktaking.RECVRST" />
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".DocumentsActivity"></activity>

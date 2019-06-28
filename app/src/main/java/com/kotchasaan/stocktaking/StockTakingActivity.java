@@ -108,18 +108,14 @@ public class StockTakingActivity extends AppCompatActivity implements EMDKManage
             public void onClick(View v) {
                 Log.d("CHECK", "***************" + jobj);
                 RequestQueue requestQueue = Volley.newRequestQueue(StockTakingActivity.this);
-                StringRequest request = new StringRequest(Request.Method.POST, "", new Response.Listener<String>() {
+                StringRequest request = new StringRequest(Request.Method.POST, "http://192.168.1.120:8888/test/index.php/welcome/get_data", new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-
                         Log.i("My success", "" + response);
-
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
-
                         Log.i("My error", "" + error);
                     }
                 }) {
